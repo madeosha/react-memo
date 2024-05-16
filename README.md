@@ -47,3 +47,5 @@ https://skypro-web-developer.github.io/react-memo/
 
 ### ОЖИДАЕМОЕ ВРЕМЯ РАБОТЫ
 15 ЧАСОВ
+###   ФАКТИЧЕСКОЕ ВРЕМЯ РАБОТЫ
+21 ЧАС
