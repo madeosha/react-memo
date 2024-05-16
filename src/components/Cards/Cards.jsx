@@ -5,10 +5,14 @@ import styles from "./Cards.module.css";
 import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
 import { Button } from "../../components/Button/Button";
 import { Card } from "../../components/Card/Card";
+import { useSimpleModeContext } from "../../context/hooks/useSimpleMode";
+import { ReserSimpleGameModal } from "../ReserSimpleGameModal/ReserSimpleGameModal";
 
 // Игра закончилась
 const STATUS_LOST = "STATUS_LOST";
 const STATUS_WON = "STATUS_WON";
+// Включен упрощенный режим, есть еще попытки
+const STATUS_RESET = "STATUS_RESET";
 // Идет игра: карты закрыты, игрок может их открыть
 const STATUS_IN_PROGRESS = "STATUS_IN_PROGRESS";
 // Начало игры: игрок видит все карты в течении нескольких секунд
@@ -46,6 +50,10 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   // Текущий статус игры
   const [status, setStatus] = useState(STATUS_PREVIEW);
 
+  const { simpleMode } = useSimpleModeContext();
+  // Количество оставщихся попыток в упрощенном режиме
+  const [countGame, setCountGame] = useState(3);
+
   // Дата начала игры
   const [gameStartDate, setGameStartDate] = useState(null);
   // Дата конца игры
@@ -74,7 +82,11 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setTimer(getTimerValue(null, null));
     setStatus(STATUS_PREVIEW);
   }
-
+  function resetSimpleGame(status = STATUS_RESET) {
+    setCountGame(countGame - 1);
+    setGameEndDate(new Date());
+    setStatus(status);
+  }
   /**
    * Обработка основного действия в игре - открытие карты.
    * После открытия карты игра может пепереходит в следующие состояния
@@ -105,6 +117,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
     // Победа - все карты на поле открыты
     if (isPlayerWon) {
+      setCountGame(3);
       finishGame(STATUS_WON);
       return;
     }
@@ -127,6 +140,13 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
     // "Игрок проиграл", т.к на поле есть две открытые карты без пары
     if (playerLost) {
+      if (simpleMode) {
+        if (countGame > 1) {
+          resetSimpleGame(STATUS_RESET);
+          return;
+        }
+      }
+      setCountGame(3);
       finishGame(STATUS_LOST);
       return;
     }
@@ -135,6 +155,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   };
 
   const isGameEnded = status === STATUS_LOST || status === STATUS_WON;
+  const isSimpleGameReset = status === STATUS_RESET;
 
   // Игровой цикл
   useEffect(() => {
@@ -195,7 +216,11 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
             </>
           )}
         </div>
-        {status === STATUS_IN_PROGRESS ? <Button onClick={resetGame}>Начать заново</Button> : null}
+        {status === STATUS_IN_PROGRESS ? (
+          <Button countGame={simpleMode ? countGame : null} onClick={resetGame}>
+            Начать заново
+          </Button>
+        ) : null}
       </div>
 
       <div className={styles.cards}>
@@ -217,6 +242,18 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
             gameDurationSeconds={timer.seconds}
             gameDurationMinutes={timer.minutes}
             onClick={resetGame}
+          />
+        </div>
+      ) : null}
+
+      {isSimpleGameReset ? (
+        <div className={styles.modalContainer}>
+          <ReserSimpleGameModal
+            isWon={status === STATUS_WON}
+            gameDurationSeconds={timer.seconds}
+            gameDurationMinutes={timer.minutes}
+            onClick={resetGame}
+            countGame={countGame}
           />
         </div>
       ) : null}

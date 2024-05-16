@@ -1,9 +1,12 @@
 import styles from "./Button.module.css";
 
-export function Button({ children, onClick }) {
+export function Button({ countGame, children, onClick }) {
   return (
-    <button onClick={onClick} className={styles.button}>
-      {children}
-    </button>
+    <div>
+      {!countGame ? null : <p>Осталось попыток: {countGame}</p>}
+      <button onClick={onClick} className={styles.button}>
+        {children}
+      </button>
+    </div>
   );
 }

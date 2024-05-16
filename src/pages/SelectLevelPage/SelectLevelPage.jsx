@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import styles from "./SelectLevelPage.module.css";
+import { useSimpleModeContext } from "../../context/hooks/useSimpleMode";
 
 export function SelectLevelPage() {
+  const { simpleMode, handleSimpleMode } = useSimpleModeContext();
   return (
     <div className={styles.container}>
       <div className={styles.modal}>
@@ -23,6 +25,10 @@ export function SelectLevelPage() {
             </Link>
           </li>
         </ul>
+        <div>
+          <input type="checkbox" id="simpleMode" checked={simpleMode ? "checked" : false} onChange={handleSimpleMode} />
+          <label htmlFor="simpleMode">Включить упрощенный режим</label>
+        </div>
       </div>
     </div>
   );

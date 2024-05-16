@@ -24,3 +24,11 @@
 .button:hover {
   background: #7ac100cc;
 }
+
+.p {
+  color: #fff;
+  font-family: StratosSkyeng;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 50px;
+}
