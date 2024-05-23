@@ -28,6 +28,9 @@ export function SelectLevelPage() {
         <div>
           <input type="checkbox" id="simpleMode" checked={simpleMode ? "checked" : false} onChange={handleSimpleMode} />
           <label htmlFor="simpleMode">Включить упрощенный режим</label>
+          <Link to="/liderboard">
+            <div className={styles.goLiderboard}>Перейти к лидерборду</div>
+          </Link>
         </div>
       </div>
     </div>
