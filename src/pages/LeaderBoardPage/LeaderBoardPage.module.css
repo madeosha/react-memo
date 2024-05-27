@@ -48,7 +48,14 @@ width: 24%;
 font-family: StratosSkyeng;
 font-size: 24px;
 color: #999999;
-width: 63%;
+width: 35%;
+}
+
+.rowTable__achiveTitle {
+  font-family: StratosSkyeng;
+  font-size: 24px;
+  color: #999999;
+  width: 28%;
 }
 
 .rowTable__timeTitle {
@@ -69,7 +76,14 @@ width: 24%;
 font-family: StratosSkyeng;
 font-size: 24px;
 color: black;
-width: 63%;
+width: 35%;
+}
+
+.rowTable__achive {
+  font-family: StratosSkyeng;
+  font-size: 24px;
+  color: black;
+  width: 28%;
 }
 
 .rowTable__time {
@@ -77,4 +91,8 @@ font-family: StratosSkyeng;
 font-size: 24px;
 color: black;
 width: 13%;
+}
+
+.svg {
+  margin-right: 12px;
 }

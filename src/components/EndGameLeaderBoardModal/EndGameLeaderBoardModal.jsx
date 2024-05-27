@@ -5,14 +5,29 @@ import { addLeader } from "../../api";
 import { useState } from "react";
 import { useLeaderContext } from "../../context/hooks/useLeader";
 import { useNavigate } from "react-router-dom";
+import { useSimpleModeContext } from "../../context/hooks/useSimpleMode";
+import { useEpiphanyContext } from "../../context/hooks/useEpiphany";
 
 export function EndGameLeaderBoardModal({ gameDurationSeconds, gameDurationMinutes, timeGame, resetGame }) {
   const navigate = useNavigate();
   const [nameInput, setNameInput] = useState("");
   const [errorName, setErrorName] = useState(false);
   const { setLiderList } = useLeaderContext();
+  // Получаем контекст упрощенного режима: включен он или нет
+  const { simpleMode } = useSimpleModeContext();
+  // Получаем контекст прозрения: был включен он или нет
+  const { isEpiphany } = useEpiphanyContext();
   const addLeaderBoard = reset => {
-    addLeader({ name: nameInput, time: timeGame })
+    let achievements = [];
+    if (!simpleMode) {
+      achievements.push(1);
+    }
+    if (!isEpiphany) {
+      achievements.push(2);
+    }
+    //console.log(achievements);
+    //return;
+    addLeader({ name: nameInput, time: timeGame, achievements: achievements })
       .then(data => {
         setLiderList(data.leaders.sort((a, b) => a.time - b.time).slice(0, 10));
         reset ? resetGame() : navigate("/liderboard");
