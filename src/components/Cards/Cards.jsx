@@ -93,14 +93,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setGameEndDate(new Date());
     setStatus(status);
   }
-  function startGame() {
-    const startDate = new Date();
-    setGameEndDate(null);
-    setGameStartDate(startDate);
-    setTimer(getTimerValue(startDate, null));
-    setStatus(STATUS_IN_PROGRESS);
-    setIsEpiphany(false);
-  }
   function resetGame() {
     setGameStartDate(null);
     setGameEndDate(null);
@@ -191,6 +183,14 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
   // Игровой цикл
   useEffect(() => {
+    function startGame() {
+      const startDate = new Date();
+      setGameEndDate(null);
+      setGameStartDate(startDate);
+      setTimer(getTimerValue(startDate, null));
+      setStatus(STATUS_IN_PROGRESS);
+      setIsEpiphany(false);
+    }
     // В статусах кроме превью доп логики не требуется
     if (status !== STATUS_PREVIEW) {
       return;
@@ -213,7 +213,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     return () => {
       clearTimeout(timerId);
     };
-  }, [status, pairsCount, previewSeconds]);
+  }, [status, pairsCount, previewSeconds, setIsEpiphany]);
 
   // Обновляем значение таймера в интервале
   useEffect(() => {
